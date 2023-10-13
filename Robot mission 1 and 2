@@ -1,0 +1,87 @@
+//Mission 1 Qn 1
+
+ev3_speak("hi");
+
+//Mission 1 Qn 2(move forward 10cm)
+const motorB = ev3_motorB;
+const motorC = ev3_motorC;
+ev3_runForTime(motorB, 2000, 100);
+ev3_runForTime(motorC, 2000, 100);
+ev3_pause(2000);
+
+//Mission 1 Qn 3(turn 90 degree counter clockwise)
+
+const motorB = ev3_motorB;
+const motorC = ev3_motorC;
+ev3_runForTime(motorB, 2000, -100);
+ev3_runForTime(motorC, 2000, 100);
+ev3_pause(2000);
+
+//Mission 1 Qn 4
+
+const motorB = ev3_motorB;
+const motorC = ev3_motorC;
+//forward 10 cm
+ev3_runForTime(motorB, 2000, 100);
+ev3_runForTime(motorC, 2000, 100);
+ev3_pause(2000);
+//turn 90 degree counter clockwise
+ev3_runForTime(motorB, 2000, -100);
+ev3_runForTime(motorC, 2000, 100);
+ev3_pause(2000);
+//forward 5 cm
+ev3_runForTime(motorB, 1000, 100);
+ev3_runForTime(motorC, 1000, 100);
+ev3_pause(1000);
+//turn 90 degree clockwise
+ev3_runForTime(motorB, 2000, 100);
+ev3_runForTime(motorC, 2000, -100);
+ev3_pause(2000);
+//forward 15 cm
+ev3_runForTime(motorB, 3000, 100);
+ev3_runForTime(motorC, 3000, 100);
+ev3_pause(1000);
+
+//Mission 2 Qn 1
+
+//Get ultrasonic, check port num 
+const UltS = ev3_ultrasonicSensor();
+let dist = 0;
+//Measure distance
+while(true) {
+    dist = ev3_ultrasonicSensorDistance(UltS);
+    display(dist);
+    ev3_pause(1000);
+}
+
+//Mission 2 Qn 2
+const motorB = ev3_motorB;
+const motorC = ev3_motorC;
+ev3_motorSetSpeed(motorB, 100);
+ev3_motorSetSpeed(motorC, 100);
+ev3_motorSetStopAction(motorB, "brake");
+ev3_motorSetStopAction(motorC, "brake");
+
+const UltS = ev3_ultrasonicSensor();
+let dist = 0;
+function detect_dist() {
+    return display("dist = " + math_round(ev3_ultrasonicSensorDistance(UltS)) + "\n");
+}
+
+function runTill10() {
+    let dist_infront = detect_dist();
+    if(dist_infront > 10) {
+        ev3_motorStart(motorB);
+        ev3_motorStart(motorC);
+        runTill10();
+    } else {
+        ev3_motorStop(motorB);
+        ev3_motorStop(motorC);
+    }
+}
+
+runTill10();
+ev3_runForTime(motorB, 6000, -100);
+ev3_runForTime(motorC, 6000, -100);
+ev3_pause(6000);
+
